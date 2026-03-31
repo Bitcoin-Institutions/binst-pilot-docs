@@ -1,0 +1,22 @@
+[book]
+title = "BINST Pilot — Bitcoin-Sovereign Institutional Processes"
+authors = ["Diego Bianqui"]
+language = "en"
+description = "Protocol documentation for Bitcoin Institutions (BINST) — a framework for creating, governing, and operating on-chain institutions anchored to Bitcoin."
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
+default-theme = "coal"
+preferred-dark-theme = "coal"
+git-repository-url = "https://github.com/Bitcoin-Institutions/binst-pilot-docs"
+edit-url-template = "https://github.com/Bitcoin-Institutions/binst-pilot-docs/edit/main/{path}"
+site-url = "/binst-pilot-docs/"
+no-section-label = false
+
+[output.html.fold]
+enable = true
+level = 1
