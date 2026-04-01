@@ -27,6 +27,7 @@
     - [Vault Unlock Flows](./bitcoin/vault-unlock.md)
     - [Sat Isolation](./bitcoin/sat-isolation.md)
     - [Graceful Degradation](./bitcoin/degradation.md)
+    - [Taproot Coverage Audit](./bitcoin/taproot-coverage.md)
 - [ZK Batch Proofs — Computational Integrity](./bitcoin/batch-proofs.md)
     - [Citrea DA Transaction Format](./bitcoin/citrea-da-format.md)
     - [Decoding Procedure](./bitcoin/decoding-procedure.md)

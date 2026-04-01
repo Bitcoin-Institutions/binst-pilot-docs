@@ -20,7 +20,10 @@ Taproot output:
       <144> OP_CHECKSEQUENCEVERIFY OP_DROP     ← ~24h delay
 
     Leaf 1 (committee override — immediate):
-      <2> <key_A> <key_B> <key_C> <3> OP_CHECKMULTISIG
+      <key_A> OP_CHECKSIG
+      <key_B> OP_CHECKSIGADD
+      <key_C> OP_CHECKSIGADD
+      <2> OP_NUMEQUAL
 ```
 
 ## How It Works
@@ -36,7 +39,7 @@ Taproot output:
 - **No accidental spending** — the key path is dead. Regular wallets can't spend it.
 - **Admin retains control** — Leaf 0 allows deliberate moves with a CSV safety net.
 - **Committee backstop** — Leaf 1 is the "break glass" emergency path.
-- **Standard Bitcoin** — uses only Taproot (BIP 341/342), OP_CHECKSIG, OP_CSV, OP_CHECKMULTISIG. No soft fork needed.
+- **Standard Bitcoin** — uses only Taproot (BIP 341/342), OP_CHECKSIG, OP_CSV, OP_CHECKSIGADD. No soft fork needed.
 - **Ordinals-compatible** — `ord` tracks inscriptions regardless of spending script.
 
 **Future enhancement:** When OP_CTV or OP_CAT activates, the vault can enforce that the UTXO is only spendable to pre-approved addresses (true covenant protection).

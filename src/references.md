@@ -14,6 +14,11 @@
 | Viem | [viem.sh](https://viem.sh/) |
 | BIP-340 (Schnorr) | [github.com/bitcoin/bips/blob/master/bip-0340.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki) |
 | BIP-341 (Taproot) | [github.com/bitcoin/bips/blob/master/bip-0341.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki) |
+| BIP-342 (Tapscript) | [github.com/bitcoin/bips/blob/master/bip-0342.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0342.mediawiki) |
+| River — What Is Taproot? | [river.com/learn/what-is-taproot](https://river.com/learn/what-is-taproot/) |
+| River — BIP 341 Taproot | [river.com/learn/terms/b/bip-341-taproot](https://river.com/learn/terms/b/bip-341-taproot/) |
+| River — BIP 342 Tapscript | [river.com/learn/terms/b/bip-342-tapscript](https://river.com/learn/terms/b/bip-342-tapscript/) |
+| River — BIP 340 Schnorr | [river.com/learn/terms/b/bip-340-schnorr-signatures](https://river.com/learn/terms/b/bip-340-schnorr-signatures/) |
 | JSON Schema 2020-12 | [json-schema.org](https://json-schema.org/) |
 | Borsh Serialization | [borsh.io](https://borsh.io/) |
 | BitVM | [bitvm.org](https://bitvm.org/) |

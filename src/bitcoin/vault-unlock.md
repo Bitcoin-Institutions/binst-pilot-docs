@@ -31,12 +31,12 @@ The vault locks the inscription UTXO but does not make it permanently frozen.
 
 3. Committee constructs a transaction:
    - Input: the vault UTXO (nSequence = 0)
-   - Witness: <0x00> <sig_A> <sig_B> <leaf_1_script> <control_block>
+   - Witness: <sig_C_or_empty> <sig_B_or_empty> <sig_A> <leaf_1_script> <control_block>
    - Output 0: recovery destination
 
 4. Bitcoin consensus validates:
-   a) 2-of-3 multisig satisfied  → OP_CHECKMULTISIG ✓
-   b) Script-path commitment     → control_block ✓
+   a) 2-of-3 via OP_CHECKSIGADD    → accumulated count ≥ 2 ✓
+   b) Script-path commitment        → control_block ✓
 
 5. Transaction confirms immediately.
 ```
