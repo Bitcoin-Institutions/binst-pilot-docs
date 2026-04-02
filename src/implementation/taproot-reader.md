@@ -1,6 +1,6 @@
 # Taproot Reader (Rust)
 
-A Rust workspace that decodes BINST data directly from Bitcoin. Four crates, 54 tests.
+A Rust workspace that decodes BINST data directly from Bitcoin. Four crates, 68 tests.
 
 ## Crate Architecture
 
@@ -27,8 +27,10 @@ Maps L2 storage slot diffs to BINST entities. Given a state diff from a batch pr
 - Computes Solidity storage slot positions (keccak256-based)
 - JMT key parsing: `E/s/` (storage), `E/H/` (headers), `E/a/` (accounts)
 - Forward-hash lookup: SHA-256 precomputation of all known (address, slot) pairs
+- **Human-readable value decoding** (`value` module): decodes raw Citrea LE storage values to addresses, uints, bools, Solidity strings, and packed `StepState` structs
+- Key discovery: Citrea stores EVM slot values in little-endian word order (entire 32-byte word byte-reversed vs. standard Solidity ABI)
 - Carries `BitcoinIdentity` struct linking entities across layers
-- 27 tests + 5 e2e integration tests
+- 41 tests (27 unit + 5 e2e + 9 value decoding integration tests)
 
 ## binst-inscription
 

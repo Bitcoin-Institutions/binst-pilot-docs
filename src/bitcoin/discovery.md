@@ -56,4 +56,8 @@ Discovery chain:
 All discovered addresses are merged into the BINST registry, which pre-computes
 storage slot hashes for matching against state diffs in ZK batch proofs.
 
+Matched state diff values are automatically decoded into human-readable form —
+addresses, integers, booleans, short Solidity strings, and packed `StepState`
+structs. See [Decoding Procedure § Human-Readable Value Decoding](./decoding-procedure.md#8-human-readable-value-decoding).
+
 Critically: **none of this depends on any specific L2 being online.**

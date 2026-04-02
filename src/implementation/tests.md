@@ -27,7 +27,7 @@ npx hardhat test          # runs all 14
 
 ## Rust Tests (`cargo test`)
 
-54 tests across 4 crates in `taproot-reader/`:
+68 tests across 4 crates in `taproot-reader/`:
 
 ### `binst-inscription` (10 tests)
 
@@ -44,7 +44,7 @@ npx hardhat test          # runs all 14
 | `parse_state_digest` | Parses state digest body |
 | `reject_unknown_type` | Rejects unknown entity type |
 
-### `binst-decoder` (27 unit + 5 e2e = 32 tests)
+### `binst-decoder` (27 unit + 14 value + 5 e2e = 46 tests)
 
 | Test | What it verifies |
 |------|-----------------|
@@ -69,6 +69,25 @@ npx hardhat test          # runs all 14
 | `add_word_offset` | U256 word offset addition |
 | `full_pipeline_*` (5 e2e) | End-to-end: proof → registry → BINST changes |
 
+#### Value decoding (`value` module — 14 tests)
+
+| Test | What it verifies |
+|------|-----------------|
+| `decode_address_from_word` | Address extracted from last 20 bytes of BE word |
+| `decode_uint256_small` | Small integer decoded from big-endian bytes |
+| `decode_uint256_zero` | Zero value decoded correctly |
+| `decode_uint256_timestamp` | Timestamp-sized integer decoded |
+| `decode_bool_true` | Non-zero byte → `true` |
+| `decode_bool_false` | Zero bytes → `false` |
+| `decode_bytes32_pubkey` | Full 32-byte hex preserved |
+| `decode_short_string` | Inline Solidity string (≤31 chars) decoded |
+| `decode_short_string_empty` | Empty string slot decoded |
+| `decode_long_string` | Long string length marker detected |
+| `decode_step_state_completed` | Packed StepState: status + actor extracted |
+| `decode_value_deleted` | `None` raw value → `DELETED` |
+| `decode_value_from_hex` | Full pipeline: Citrea LE hex → BE → decoded address |
+| `field_type_coverage` | Every `FieldChange` variant has a type mapping |
+
 ### `citrea-decoder` (7 tests)
 
 | Test | What it verifies |
@@ -92,7 +111,7 @@ npx hardhat test          # runs all 14
 | `decode_address_array_too_short` | Rejects truncated ABI data |
 
 ```bash
-cd taproot-reader && cargo test    # runs all 54
+cd taproot-reader && cargo test    # runs all 68
 ```
 
 ## Running Everything
@@ -100,6 +119,7 @@ cd taproot-reader && cargo test    # runs all 54
 ```bash
 # From project root
 npx hardhat test && cd taproot-reader && cargo test
+# 14 Solidity + 68 Rust = 82 total tests
 ```
 
 No external services required — all tests run against local state.

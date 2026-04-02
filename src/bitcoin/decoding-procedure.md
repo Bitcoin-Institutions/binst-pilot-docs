@@ -70,4 +70,58 @@ cargo run --bin citrea-scanner -- \
 The `--discover` flag crawls the deployer contract on-chain:
 `deployer.getInstitutions()` → `institution.getProcesses()` → `template.getAllInstances()`.
 
+## 8. Human-Readable Value Decoding
+
+Once BINST storage slot changes are identified, raw hex values are automatically
+decoded into human-readable form. Example output from block 127848:
+
+```
+ProcessTemplate.name = "KYC Verification"
+ProcessInstance.creator = 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
+ProcessInstance.stepStates[0] = Completed by 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
+ProcessInstance.currentStepIndex = 4
+ProcessInstance.completed = true
+ProcessTemplate.steps.length = 4
+BINSTDeployer.institutions[0] = 0x3a6a07c5d2c420331f68dd407aafff92f3275a86
+```
+
+### Supported Solidity types
+
+| Solidity type | Decoded form |
+|---|---|
+| `address` | `0x8cf6fe5c…d762` |
+| `uint256` | `4`, `1774750572` |
+| `bool` | `true` / `false` |
+| `string` (short ≤31 bytes) | `"KYC Verification"` |
+| `string` (long >31 bytes) | `<string, 62 bytes>` |
+| `StepState` (packed struct) | `Completed by 0x8cf6…d762` |
+| `bytes32` | `0x…` hex |
+
+### Citrea little-endian word order
+
+**Key discovery:** Citrea / Sovereign SDK stores EVM storage values in
+little-endian word order — the entire 32-byte slot is byte-reversed compared
+to standard Solidity ABI encoding.
+
+```
+uint256 value 1:
+  Standard Solidity (BE): 0x00000000…00000001
+  Citrea state trie (LE): 0x01000000…00000000
+```
+
+The decoder pads to 32 bytes (state diffs may trim trailing LE zeros) and
+reverses before interpreting according to the field's Solidity type.
+
+### Packed struct layout (StepState)
+
+Solidity packs `uint8 status` + `address actor` right-aligned in one slot:
+
+```
+BE word (after LE→BE reversal):
+  [00 × 11 bytes][actor × 20 bytes][status × 1 byte]
+   ↑ padding      ↑ bytes 11..31    ↑ byte 31
+```
+
+Status: `0` = Pending, `1` = Completed, `2` = Rejected.
+
 See the `taproot-reader/crates/cli/` directory in the [pilot repository](https://github.com/Bitcoin-Institutions/binst-pilot).
