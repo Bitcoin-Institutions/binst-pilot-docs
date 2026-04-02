@@ -25,10 +25,35 @@ How to find and verify BINST entities — from casual browsing to full trustless
 Tier 1 (standard tooling):  Ordinals explorer + Rune wallet
   → identity, ownership, membership — no full node needed
 
-Tier 2 (verification):  Bitcoin full node + taproot-reader
+Tier 2 (L2 RPC):  Citrea RPC + citrea-scanner --discover
+  → process state, step execution, BINST contract discovery — no full node needed
+
+Tier 3 (verification):  Bitcoin full node + taproot-reader
   → ZK proof verification, state diff decoding — trustless
 ```
 
-**Basic discovery requires no custom software and no full node.** Standard Ordinals and Rune tooling covers identity, ownership, membership, and provenance. The full node is only needed for the strongest verification tier.
+**Basic discovery requires no custom software and no full node.** Standard Ordinals and Rune tooling covers identity, ownership, membership, and provenance. Tier 2 adds on-chain contract discovery via Citrea RPC. The full node is only needed for the strongest verification tier.
+
+### Auto-discovery with `--discover`
+
+The `citrea-scanner` CLI can automatically crawl the deployer contract to find
+all BINST contracts registered on-chain:
+
+```bash
+cargo run --bin citrea-scanner -- \
+  --citrea-rpc https://rpc.testnet.citrea.xyz \
+  --discover \
+  --deployer 0xd0abca83bd52949fcf741d6da0289c5ec7235aaf \
+  --block 127848
+```
+
+Discovery chain:
+1. `deployer.getInstitutions()` → all institution addresses
+2. `institution.getProcesses()` → all template addresses
+3. `deployer.getDeployedProcesses()` → standalone templates
+4. `template.getAllInstances()` → all instance addresses
+
+All discovered addresses are merged into the BINST registry, which pre-computes
+storage slot hashes for matching against state diffs in ZK batch proofs.
 
 Critically: **none of this depends on any specific L2 being online.**

@@ -5,7 +5,7 @@ Six TypeScript scripts demonstrate the protocol end-to-end.
 | Script | Purpose |
 |---|---|
 | `demo-flow.ts` | End-to-end: deploy → institution → members → process → execute all steps |
-| `inscribe-binst.ts` | Generate `ord` commands to inscribe BINST entities on Bitcoin testnet4 |
+| `inscribe-binst.ts` | Generate `ord` commands to inscribe BINST entities on Bitcoin testnet4. Requires `BTC_RPC_PASS` in `.env` |
 | `taproot-vault.ts` | Build Taproot leaf scripts for inscription UTXO safety (NUMS + CSV + multisig) |
 | `bitcoin-awareness.ts` | Read Bitcoin Light Client, query finality RPCs |
 | `finality-monitor.ts` | Poll Citrea RPCs until a watched L2 block is committed / ZK-proven |

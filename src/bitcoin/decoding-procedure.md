@@ -39,12 +39,35 @@ First byte = variant discriminant (0–4). Deserialize to typed `DataOnDa` value
 
 ## CLI Usage
 
-```bash
-# Scan a single block
-cargo run --bin citrea-scanner -- --block 127600 --rpc-user testnet4rpc --rpc-pass <pass>
+### Bitcoin Core mode (local full node)
 
-# Scan a range, JSON output
-cargo run --bin citrea-scanner -- --from 127600 --to 127761 --format json
+```bash
+# Scan a single block (uses cookie auth by default)
+cargo run --bin citrea-scanner -- --block 127600
+
+# Scan a range with explicit auth, JSON output
+cargo run --bin citrea-scanner -- --from 127600 --to 127761 --format json \
+  --rpc-user <user> --rpc-pass <pass>
 ```
+
+### Citrea RPC mode (no Bitcoin node required)
+
+```bash
+# Query batch proofs via Citrea RPC with auto-discovery of BINST contracts
+cargo run --bin citrea-scanner -- \
+  --citrea-rpc https://rpc.testnet.citrea.xyz \
+  --discover \
+  --deployer 0xd0abca83bd52949fcf741d6da0289c5ec7235aaf \
+  --block 127848
+
+# Manual contract addresses (skip discovery)
+cargo run --bin citrea-scanner -- \
+  --citrea-rpc https://rpc.testnet.citrea.xyz \
+  --deployer 0x... --template 0x... --instance 0x... \
+  --from 127840 --to 127850
+```
+
+The `--discover` flag crawls the deployer contract on-chain:
+`deployer.getInstitutions()` → `institution.getProcesses()` → `template.getAllInstances()`.
 
 See the `taproot-reader/crates/cli/` directory in the [pilot repository](https://github.com/Bitcoin-Institutions/binst-pilot).

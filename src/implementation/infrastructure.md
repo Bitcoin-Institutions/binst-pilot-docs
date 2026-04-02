@@ -39,7 +39,7 @@
 ```bash
 npm install
 npx hardhat compile
-npx hardhat test                        # 12 Solidity tests
-cd taproot-reader && cargo test         # 16 Rust tests
+npx hardhat test                        # 14 Solidity tests
+cd taproot-reader && cargo test         # 54 Rust tests
 npx hardhat run scripts/demo-flow.ts    # local demo
 ```
