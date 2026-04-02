@@ -92,6 +92,14 @@ BINST uses **every active Taproot feature** relevant to its design goal of UTXO-
 
 The features we skip (key-path, MuSig2, annex, OP_SUCCESS) are either deliberately disabled for security, irrelevant to script authors, or reserved for future upgrades. No Taproot capability is left on the table without a documented reason.
 
+---
+
+## Post-Quantum Considerations
+
+See the dedicated [Post-Quantum Analysis](./post-quantum.md) page for a
+full assessment of how Taproot's P2PK structure affects BINST and what
+mitigations are already in place.
+
 ### References
 
 - [BIP 340 — Schnorr Signatures](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki)
