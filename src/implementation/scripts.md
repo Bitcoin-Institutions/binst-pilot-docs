@@ -2,14 +2,17 @@
 
 Six TypeScript scripts demonstrate the protocol end-to-end.
 
-| Script | Purpose |
-|---|---|
-| `demo-flow.ts` | End-to-end: deploy → institution → members → process → execute all steps |
-| `inscribe-binst.ts` | Generate `ord` commands to inscribe BINST entities on Bitcoin testnet4. Requires `BTC_RPC_PASS` in `.env` |
-| `taproot-vault.ts` | Build Taproot leaf scripts for inscription UTXO safety (NUMS + CSV + multisig) |
-| `bitcoin-awareness.ts` | Read Bitcoin Light Client, query finality RPCs |
-| `finality-monitor.ts` | Poll Citrea RPCs until a watched L2 block is committed / ZK-proven |
-| `test-protocol.ts` | Query live deployed contracts on Citrea testnet |
+| Script | Purpose | Status |
+|---|---|---|
+| `demo-flow.ts` | End-to-end: deploy → institution → members → process → execute all steps | Active |
+| `inscribe-binst.ts` | Generate `ord` commands to inscribe BINST entities on Bitcoin testnet4 | Active |
+| `taproot-vault.ts` | Build Taproot leaf scripts for inscription UTXO safety (NUMS + CSV + multisig) | **Deprecated** — replaced by `binst-decoder::vault` (Rust miniscript) |
+| `psbt-transfer.ts` | Generate PSBT commands for atomic vault transfers | **Deprecated** — replaced by wallet-native descriptor signing |
+| `bitcoin-awareness.ts` | Read Bitcoin Light Client, query finality RPCs | Active |
+| `finality-monitor.ts` | Poll Citrea RPCs until a watched L2 block is committed / ZK-proven | Active |
+| `test-protocol.ts` | Query live deployed contracts on Citrea testnet | Active |
+
+> **Note:** `taproot-vault.ts` and `psbt-transfer.ts` are kept as reference implementations. The Rust vault module (`binst-decoder/src/vault.rs`) uses BIP 379 miniscript to produce wallet-compatible Taproot descriptors, replacing the hand-rolled scripts. See [Taproot Vault](../bitcoin/taproot-vault.md).
 
 ## Usage Examples
 
@@ -23,8 +26,8 @@ npx hardhat run scripts/demo-flow.ts --network citreaTestnet
 # Generate inscription command
 npx ts-node scripts/inscribe-binst.ts institution "Acme Financial" <admin_pubkey>
 
-# Generate Taproot vault scripts
-npx ts-node scripts/taproot-vault.ts <admin_pk> <committee_A> <committee_B> <committee_C>
+# Generate vault descriptor (Rust — replaces taproot-vault.ts)
+cd taproot-reader && cargo test -p binst-decoder vault
 
 # Bitcoin awareness (reads Light Client)
 npx tsx scripts/bitcoin-awareness.ts

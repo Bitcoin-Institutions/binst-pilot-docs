@@ -27,7 +27,7 @@ npx hardhat test          # runs all 14
 
 ## Rust Tests (`cargo test`)
 
-68 tests across 4 crates in `taproot-reader/`:
+79 tests across 4 crates in `taproot-reader/`:
 
 ### `binst-inscription` (10 tests)
 
@@ -44,7 +44,7 @@ npx hardhat test          # runs all 14
 | `parse_state_digest` | Parses state digest body |
 | `reject_unknown_type` | Rejects unknown entity type |
 
-### `binst-decoder` (27 unit + 14 value + 5 e2e = 46 tests)
+### `binst-decoder` (27 unit + 14 value + 11 vault + 5 e2e = 57 tests)
 
 | Test | What it verifies |
 |------|-----------------|
@@ -68,6 +68,22 @@ npx hardhat test          # runs all 14
 | `mapping_slot_address` | Mapping storage layout |
 | `add_word_offset` | U256 word offset addition |
 | `full_pipeline_*` (5 e2e) | End-to-end: proof → registry → BINST changes |
+
+#### Vault module (`vault` — 11 tests)
+
+| Test | What it verifies |
+|------|-----------------|
+| `compile_produces_descriptor` | Policy compiles to `tr(NUMS, {…})` descriptor |
+| `testnet_address_starts_with_tb1p` | Testnet address is valid Taproot bech32m |
+| `mainnet_address_starts_with_bc1p` | Mainnet address is valid Taproot bech32m |
+| `csv_delay_one_compiles` | Minimum valid CSV delay compiles |
+| `csv_delay_zero_rejected` | CSV delay = 0 rejected (miniscript minimum is 1) |
+| `analyze_returns_two_paths` | Two spending paths: admin + committee |
+| `admin_path_has_timelock` | Admin path has CSV = 144, requires 1 key |
+| `committee_path_is_immediate` | Committee path has no timelock, requires 3 keys |
+| `witness_sizes_are_reasonable` | All paths < 200 vbytes |
+| `descriptor_round_trips` | `parse(format(descriptor)) == descriptor` |
+| `address_accessor_works` | Network-specific address accessor returns correct prefix |
 
 #### Value decoding (`value` module — 14 tests)
 
@@ -111,7 +127,7 @@ npx hardhat test          # runs all 14
 | `decode_address_array_too_short` | Rejects truncated ABI data |
 
 ```bash
-cd taproot-reader && cargo test    # runs all 68
+cd taproot-reader && cargo test    # runs all 79
 ```
 
 ## Running Everything
@@ -119,7 +135,7 @@ cd taproot-reader && cargo test    # runs all 68
 ```bash
 # From project root
 npx hardhat test && cd taproot-reader && cargo test
-# 14 Solidity + 68 Rust = 82 total tests
+# 14 Solidity + 79 Rust = 93 total tests
 ```
 
 No external services required — all tests run against local state.
