@@ -21,7 +21,6 @@ The architecture is built on a **three-layer sovereignty model**.
 │  ProcessInstance.sol ─── Running execution + state          │
 │  BINSTDeployer.sol ───── Factory & registry                 │
 │                                                             │
-│  Cross-chain: LayerZero V2 mirrors identity to other L2s    │
 │  Execution state verified trustlessly via Bitcoin DA proofs  │
 └──────────────────────────┬──────────────────────────────────┘
                            │ future
@@ -40,3 +39,5 @@ Each layer serves a distinct purpose:
 - **Bitcoin L1** — permanent identity, membership, and the root of authority
 - **L2 Processing** — complex logic execution as a delegate of the Bitcoin key holder
 - **Verification** (future) — trust-minimized verification between L2 and Bitcoin
+
+> **Pilot scope note:** Cross-chain identity mirroring via LayerZero V2 is an architectural plan (Phase 3) — not implemented in the current pilot. The pilot runs on a single L2 (Citrea). See [Cross-Chain Synchronization](./cross-chain.md) for the design.

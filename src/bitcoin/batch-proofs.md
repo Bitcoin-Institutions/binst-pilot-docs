@@ -22,7 +22,7 @@ The L2 (Citrea) periodically writes **ZK batch proofs** to Bitcoin — mathemati
 Process instance state reaches Bitcoin via batch proof. This means:
 
 - A second L2 can verify process execution by **reading Bitcoin DA** — no messaging protocol needed
-- The `taproot-reader` can reconstruct which steps were executed, by whom, at what timestamp
+- The `binst-protocol` CLI can reconstruct which steps were executed, by whom, at what timestamp
 - Cross-chain execution verification is **trustless** — it goes through Bitcoin, not through any relay
 
 See: [Citrea DA Format](./citrea-da-format.md) · [Decoding Procedure](./decoding-procedure.md)

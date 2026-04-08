@@ -124,4 +124,4 @@ BE word (after LE→BE reversal):
 
 Status: `0` = Pending, `1` = Completed, `2` = Rejected.
 
-See the `taproot-reader/crates/cli/` directory in the [pilot repository](https://github.com/Bitcoin-Institutions/binst-pilot).
+See the `binst-protocol/crates/cli/` directory in the [pilot repository](https://github.com/Bitcoin-Institutions/binst-pilot).

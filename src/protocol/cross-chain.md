@@ -1,5 +1,8 @@
 # Cross-Chain Synchronization
 
+> **⚠ Architectural vision — not built in the pilot.**
+> This page describes Phase 3 design. The current pilot runs on a single L2 (Citrea). `BINSTRelay.sol` and `InstitutionMirror.sol` do not exist yet. The Bitcoin DA verification path is live; the LayerZero identity sync is not.
+
 BINST institutions can be **omnipresent across multiple L2s** simultaneously, not just portable between them.
 
 ## The Dual-Channel Model

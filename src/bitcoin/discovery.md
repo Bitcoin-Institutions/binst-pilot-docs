@@ -14,9 +14,9 @@ How to find and verify BINST entities — from casual browsing to full trustless
 | What step is instance Y on? | L2 RPC (Citrea) | ❌ No |
 | Is institution X anchored? | L2 view call (`inscriptionId != ""`) | ❌ No |
 | Was step execution valid? | ZK batch proof decode | ✅ Yes |
-| Full trustless verification? | taproot-reader | ✅ Yes |
+| Full trustless verification? | binst-protocol CLI | ✅ Yes |
 | Which L2 is processing? | Inscription metadata | ❌ No |
-| Is this person a member? (cross-chain) | InstitutionMirror on any L2 | ❌ No |
+| Is this person a member? (cross-chain) | InstitutionMirror on any L2 *(Phase 3 — not yet built)* | ❌ No |
 | Did step X complete? (cross-chain) | Bitcoin DA batch proof | ✅ Yes |
 
 ## Two Tiers
@@ -28,7 +28,7 @@ Tier 1 (standard tooling):  Ordinals explorer + Rune wallet
 Tier 2 (L2 RPC):  Citrea RPC + citrea-scanner --discover
   → process state, step execution, BINST contract discovery — no full node needed
 
-Tier 3 (verification):  Bitcoin full node + taproot-reader
+Tier 3 (verification):  Bitcoin full node + binst-protocol CLI
   → ZK proof verification, state diff decoding — trustless
 ```
 

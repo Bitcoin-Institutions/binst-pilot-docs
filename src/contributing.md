@@ -13,9 +13,10 @@ BINST is an open-source project under the
 | Area | Stack | Description |
 |------|-------|-------------|
 | Smart contracts | Solidity 0.8.24, Hardhat 3 | Extend or improve the four core contracts |
-| Taproot Reader | Rust, `no_std` | Improve Bitcoin transaction parsing, add crates |
+| BINST Protocol | Rust, `no_std` | Improve Bitcoin transaction parsing, add crates |
 | Scripts & tooling | TypeScript, Viem | New protocol demonstrations, CLI tools |
 | Inscription tooling | Rust, `ord` | Improve `binst` metaprotocol parsing and indexing |
+| Webapp | Rust, WASM, Trunk | Improve the pilot web UI |
 | Documentation | Markdown, mdbook | Improve or translate this book |
 | Testing | TypeScript, Rust | Expand test coverage across all layers |
 
@@ -32,7 +33,7 @@ npx hardhat compile
 npx hardhat test
 
 # Rust
-cd taproot-reader
+cd binst-protocol
 cargo build
 cargo test
 ```

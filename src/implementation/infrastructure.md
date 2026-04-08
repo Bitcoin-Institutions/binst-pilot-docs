@@ -40,6 +40,6 @@
 npm install
 npx hardhat compile
 npx hardhat test                        # 14 Solidity tests
-cd taproot-reader && cargo test         # 68 Rust tests
+cd binst-protocol && cargo test         # 79 Rust tests
 npx hardhat run scripts/demo-flow.ts    # local demo
 ```

@@ -22,6 +22,7 @@
 # Bitcoin Integration
 
 - [Ordinals — Entity Identity](./bitcoin/ordinals.md)
+    - [Mempool Pre-Consolidation](./bitcoin/mempool-consolidation.md)
 - [Runes — Membership Tokens](./bitcoin/runes.md)
 - [Taproot Vault — UTXO Safety](./bitcoin/taproot-vault.md)
     - [Vault Unlock Flows](./bitcoin/vault-unlock.md)
@@ -38,8 +39,10 @@
 # Implementation
 
 - [Smart Contracts](./implementation/contracts.md)
-- [Taproot Reader (Rust)](./implementation/taproot-reader.md)
+- [BINST Protocol (Rust)](./implementation/taproot-reader.md)
     - [BitcoinIdentity Type](./implementation/bitcoin-identity.md)
+- [WASM Webapp](./implementation/webapp.md)
+- [Dependencies](./implementation/dependencies.md)
 - [Scripts & Tooling](./implementation/scripts.md)
 - [Infrastructure & L2 Config](./implementation/infrastructure.md)
 - [Test Suite](./implementation/tests.md)

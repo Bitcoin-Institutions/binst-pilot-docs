@@ -52,7 +52,7 @@ As Bitcoin's scripting capabilities evolve, BINST will add a trust-minimized ver
 - **Covenants** (OP_CTV, OP_CAT) — native spending constraints for enhanced vaults and trustless bridges
 - **SNARK verification** — ZK proof verification within Bitcoin Script
 
-This layer doesn't exist yet — it depends on Bitcoin protocol evolution. See the [Technology Landscape](../technology/bitvm.md) section for details.
+This layer doesn't exist yet — it depends on Bitcoin protocol evolution. BitVM/BitVM2/BitVM3, OP_CTV, and on-chain SNARK verification are active areas of Bitcoin development and are on the BINST roadmap for future phases.
 
 ## What Each Layer Guarantees
 

@@ -41,8 +41,11 @@ institution (root — no parent required)
   "v": 0,
   "type": "institution",
   "name": "Acme Financial",
-  "admin_btc_pubkey": "a3f4b2c1d5e6f7890123456789abcdef0123456789abcdef0123456789abcdef",
-  "created": "2026-03-15T12:00:00Z"
+  "admin": "a3f4b2c1d5e6f7890123456789abcdef0123456789abcdef0123456789abcdef",
+  "citrea_contract": "0x1234...5678",
+  "membership_rune": "ACME•MEMBER",
+  "description": "Acme Financial pilot institution",
+  "website": "https://acme.example"
 }
 ```
 
@@ -90,7 +93,7 @@ institution (root — no parent required)
 
 ## Validation
 
-The full JSON Schema (2020-12) is available at [`binst-metaprotocol.json`](https://github.com/Bitcoin-Institutions/binst-pilot/blob/main/taproot-reader/schema/binst-metaprotocol.json).
+The full JSON Schema (2020-12) is available at [`binst-metaprotocol.json`](https://github.com/Bitcoin-Institutions/binst-pilot/blob/main/binst-protocol/schema/binst-metaprotocol.json).
 
 ```bash
 # Validate with ajv-cli

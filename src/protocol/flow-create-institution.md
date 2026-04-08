@@ -58,18 +58,18 @@ OP_FALSE OP_IF
   OP_PUSH "application/json"             ← MIME type
   OP_PUSH 7                              ← metaprotocol tag
   OP_PUSH "binst"                        ← protocol identifier
-  OP_PUSH 5                              ← metadata tag
-  OP_PUSH <CBOR-encoded metadata>        ← structured metadata
-  OP_PUSH 3                              ← parent tag
+  OP_PUSH 3                              ← parent tag (optional on root)
   OP_PUSH <binst-root-inscription-id>    ← provenance chain
   OP_PUSH 0                              ← body separator
   OP_PUSH '{
+    "v": 0,
     "type": "institution",
     "name": "Acme Financial",
-    "admin_btc_pubkey": "a3f4...x-only-32-bytes",
+    "admin": "a3f4b2c1d5e6f7890123456789abcdef0123456789abcdef0123456789abcdef",
     "citrea_contract": "0x1234...5678",
-    "created_btc_height": 127600,
-    "members": ["pubkey1...", "pubkey2..."]
+    "membership_rune": "ACME•MEMBER",
+    "description": "Acme Financial pilot institution",
+    "website": "https://acme.example"
   }'
 OP_ENDIF
 ```

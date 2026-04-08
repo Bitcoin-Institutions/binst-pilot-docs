@@ -25,18 +25,18 @@ The user who holds the Bitcoin private key has **full control** of every element
 | **Inscription UTXO** | Identity, metadata, provenance | No — this IS the identity |
 | **Rune distribution** | Membership tokens | No — lives on Bitcoin L1 |
 | **L2 contract** | Processing logic (workflows, payments) | **Yes** — redeploy to any L2 |
-| **Mirror contracts** | Read-only identity/membership on other L2s | **Yes** — add/remove mirrors |
+| **Mirror contracts** | Read-only identity/membership on other L2s *(Phase 3 — not yet built)* | **Yes** — add/remove mirrors |
 
 ## L2 Portability
 
 Because the root of authority is the Bitcoin key (not the L2 contract address), the protocol is not locked into any specific L2. A user who starts on Citrea can later move to BOB, Rootstock, or any future Bitcoin L2 without losing their institution's identity, provenance, or membership.
 
-Beyond simple portability, BINST supports **multi-chain presence** via a dual-channel sync model:
+Beyond simple portability, BINST supports **multi-chain presence** via a dual-channel sync model (Phase 3 plan — not yet implemented):
 
-- **LayerZero V2** syncs identity and membership across L2s in real-time
-- **Bitcoin DA** provides trustless execution state verification via ZK batch proofs
+- **LayerZero V2** (future) — syncs identity and membership across L2s in real-time
+- **Bitcoin DA** — provides trustless execution state verification via ZK batch proofs (available now)
 
-Mirror contracts on other L2s provide read-only identity and membership verification. Process execution stays on the home chain — **single-writer per process instance** prevents concurrent mutation conflicts across chains.
+Mirror contracts on other L2s will provide read-only identity and membership verification. Process execution stays on the home chain — **single-writer per process instance** prevents concurrent mutation conflicts across chains.
 
 See [Cross-Chain Synchronization](./cross-chain.md) for the full model.
 

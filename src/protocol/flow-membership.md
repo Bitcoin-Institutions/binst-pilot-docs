@@ -17,7 +17,7 @@ Rune: ACME•MEMBER
 - **Check membership:** "Does Alice hold ≥1 `ACME•MEMBER`?" — standard Rune indexer query. No L2 needed.
 - **Add member:** Admin sends 1 unit to new member's Bitcoin address.
 - **Remove member:** Admin burns the token via edict, or member sends it back.
-- **Visible:** Members see membership in any Rune-aware wallet (Xverse, Unisat).
+- **Visible:** Members see membership in any Rune-aware wallet (UniSat, SafePal BTC).
 
 ## Adding a Member (Full Flow)
 

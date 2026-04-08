@@ -59,14 +59,13 @@ The user does **not** create a Bitcoin transaction when they interact with Citre
 | Check process state | Citrea (EVM view call) | Free |
 | Verify inscription exists | Bitcoin (indexer query) | Free |
 | Verify batch proof | Bitcoin DA (decode) | Free |
-| Cross-chain identity query | LayerZero / Bitcoin DA | Relay fee or free |
 
 ## Wallet UX
 
 ### Current: Two Wallets
 
-- **Bitcoin wallet** (Xverse, Unisat) — for inscriptions and runes
-- **EVM wallet** (MetaMask) — for L2 transactions
+- **Bitcoin wallet** (UniSat, SafePal BTC) — for inscriptions and runes
+- **EVM wallet** (MetaMask, SafePal EVM) — for L2 transactions
 
 The Schnorr precompile on Citrea (`0x5a`) means contracts *can verify* Bitcoin Schnorr signatures, but the current flow requires both wallets.
 

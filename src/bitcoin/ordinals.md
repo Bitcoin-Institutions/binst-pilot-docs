@@ -91,6 +91,12 @@ child, not a reinscription of the institution.
 BINST inscriptions are discoverable through standard tooling:
 
 - **Ordinals explorers** (ordinals.com, ord.io, Hiro) — search by metaprotocol
-- **Ordinals wallets** (Xverse, Unisat) — shows as an asset
+- **Ordinals wallets** (UniSat, SafePal BTC) — shows as an asset
 - **Self-hosted `ord` indexer** — trustless, complete access
 - **No custom BINST software needed for basic discovery**
+
+---
+
+See [Mempool Pre-Consolidation](./mempool-consolidation.md) for the rules
+and risk model that apply while a commit/reveal chain is in-flight between
+broadcast and confirmation.

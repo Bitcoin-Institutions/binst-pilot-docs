@@ -23,7 +23,7 @@ Rune: ACME•MEMBER
 
 ## No Custom Software Needed
 
-Membership is a standard Rune balance check — any Rune indexer, any Rune-aware wallet (Xverse, Unisat), or a self-hosted `ord` can verify it. No BINST-specific tooling required for basic membership queries.
+Membership is a standard Rune balance check — any Rune indexer, any Rune-aware wallet (UniSat, SafePal BTC), or a self-hosted `ord` can verify it. No BINST-specific tooling required for basic membership queries.
 
 ## Future: Governance Tokens
 

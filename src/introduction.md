@@ -2,30 +2,31 @@
 
 > *A proof-of-concept for Bitcoin-sovereign institutional processes.*
 
-This pilot implements a three-layer architecture for institutional
-operations where **the Bitcoin key is the root of authority**, Ordinals
-inscriptions carry institutional identity, and an EVM-compatible L2
-executes operational logic as a portable delegate.
+Can complex institutional entities — institutions, process templates,
+running workflows, step-by-step execution — be **permanently represented
+on Bitcoin L1** and have their associated events **verified at the
+Bitcoin layer**?
 
-## The problem
+That is the core question. Not "decentralization" in the abstract, but
+something concrete: can a Bitcoin inscription be the canonical record of
+an institution's existence, and can the execution of a multi-step process
+be traced back to Bitcoin cryptographically — without trusting an L2?
 
-Current approaches to on-chain institutional operations either:
+The pilot is a proof-of-concept for that claim. An EVM-compatible L2
+(Citrea) handles the operational logic as a delegate of the Bitcoin key
+holder. The L2 is replaceable; the inscription is not.
 
-- Run everything on an L2, with no Bitcoin anchor — identity is L2-dependent
-- Use Bitcoin only for settlement, with no institutional semantics
-- Lock users into a single L2 with no portability
+## How it works
 
-## The pilot's approach
-
-| Concern | How the pilot handles it |
+| Concern | Approach |
 |---|---|
-| Institutional identity | Inscribed on Bitcoin L1 via Ordinals — permanent, sovereign |
-| Membership | Represented by Runes tokens on Bitcoin L1 |
-| Operational logic | Runs on an L2 (Citrea) as a portable delegate |
-| Authority | The Bitcoin key holder controls everything; the L2 contract obeys |
-| L2 portability | Switching L2s means redeploying contracts bound to the same inscription |
-| UTXO safety | Taproot script tree (NUMS + CSV + multisig) protects inscription sats |
-| Bitcoin verification | Taproot Reader decodes L2 state directly from Bitcoin DA transactions |
+| Institutional identity | Inscribed on Bitcoin L1 via Ordinals — the inscription IS the entity |
+| Membership | Runes tokens on Bitcoin L1 — holding ≥1 token means membership |
+| Operational logic | Runs on Citrea (EVM L2) as a delegate of the Bitcoin key |
+| Authority | The Bitcoin key controls the inscription UTXO; the L2 contract obeys it |
+| L2 replaceability | Redeploying contracts on a new L2 and binding them to the same inscription preserves identity |
+| UTXO safety | Taproot script tree (NUMS + CSV + multisig) protects the inscription sat |
+| Event verification | L2 batch proofs are written to Bitcoin DA — execution state is ZK-provable from Bitcoin |
 
 If the L2 disappears, the inscription remains. If the L2 is replaced,
 the same Bitcoin identity binds to the new contracts.
@@ -34,7 +35,7 @@ the same Bitcoin identity binds to the new contracts.
 
 - **4 smart contracts** deployed and verified on Citrea testnet —
   factory, institution, process template, process instance
-- **4 Rust crates** (Taproot Reader) — decoding BINST data directly
+- **4 Rust crates** (BINST Protocol) — decoding BINST data directly
   from Bitcoin transactions, `no_std`-compatible, WASM-ready
 - **6 TypeScript scripts** — end-to-end protocol flows, Bitcoin
   inscription tooling, finality monitoring
@@ -42,6 +43,9 @@ the same Bitcoin identity binds to the new contracts.
   for four entity types
 - **Taproot vault script tree** — NUMS + CSV + multisig UTXO
   protection for inscription sats
+- **Rust/WASM webapp** — pilot user interface with real wallet
+  integration (UniSat, SafePal, MetaMask), L1 inscription stack
+  (PSBT batching), and L2 EVM queue (review buffer)
 
 ## What the pilot proves
 
@@ -51,6 +55,8 @@ the same Bitcoin identity binds to the new contracts.
 4. Bitcoin transaction data (DA layer) can be decoded to reconstruct
    full institutional state without trusting the L2
 5. Inscription UTXOs can be protected with Taproot script trees
+6. A browser-native app can route L1 actions (PSBTs) and L2 actions
+   (EVM calls) to the correct wallet with no mocked flows
 
 ## Source Code
 

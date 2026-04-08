@@ -27,7 +27,7 @@ npx hardhat test          # runs all 14
 
 ## Rust Tests (`cargo test`)
 
-79 tests across 4 crates in `taproot-reader/`:
+80 tests across 4 crates in `binst-protocol/`:
 
 ### `binst-inscription` (10 tests)
 
@@ -127,15 +127,46 @@ npx hardhat test          # runs all 14
 | `decode_address_array_too_short` | Rejects truncated ABI data |
 
 ```bash
-cd taproot-reader && cargo test    # runs all 79
+cd binst-protocol && cargo test    # runs all 80 protocol tests
+```
+
+## WASM Webapp Tests (`cargo test`)
+
+83 tests in `webapp/binst-pilot-webapp/`, running on the native target
+(no browser required):
+
+| Module | Count | What is tested |
+|--------|-------|----------------|
+| `stack` | 21 | `Stack` ordering, parent refs, reorder, validate, summary |
+| `l2_queue` | 13 | `L2Queue` push/remove/clear/validate/summary, `L2ActionKind` labels |
+| `storage` | 12 | localStorage save/load/confirm/clear, JSON round-trips |
+| `txbuilder` | 9 | Commit+reveal PSBT construction, fee calculation, parent UTXO input |
+| `auth` | 7 | Authentication state transitions |
+| `stack_plan` | 7 | `build_plan` — all institution states: Root, InBatch, InMempool, Confirmed, External; `ParentSource` routing |
+| `decode` | 9 | JSON/witness/vault decoder helpers |
+| `dom` | 6 | HTML escaping, toast variants, DOM helpers |
+| `search` | 4 | Institution card rendering, HTML escaping, source badges |
+| `nav` | 4 | View routing, URL hash parsing |
+| `institution` | 3 | Institution card rendering |
+
+UI code (DOM manipulation, wallet calls, async flows) runs only in WASM and is
+covered by browser smoke testing, not unit tests.
+
+```bash
+cd webapp/binst-pilot-webapp && cargo test    # runs all 83 webapp tests
 ```
 
 ## Running Everything
 
 ```bash
-# From project root
-npx hardhat test && cd taproot-reader && cargo test
-# 14 Solidity + 79 Rust = 93 total tests
-```
+# Solidity
+cd binst-pilot && npx hardhat test            # 14 tests
 
-No external services required — all tests run against local state.
+# Protocol crates
+cd binst-protocol && cargo test               # 80 tests
+
+# WASM webapp
+cd webapp/binst-pilot-webapp && cargo test    # 83 tests
+
+# Total: 177 tests
+```

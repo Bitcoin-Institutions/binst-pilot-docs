@@ -1,6 +1,8 @@
 # Scripts & Tooling
 
-Six TypeScript scripts demonstrate the protocol end-to-end.
+Six TypeScript scripts demonstrate the protocol end-to-end from the CLI.
+The [WASM Webapp](./webapp.md) provides the browser-native equivalent
+for institution creation, process design, and step execution.
 
 | Script | Purpose | Status |
 |---|---|---|
@@ -27,7 +29,7 @@ npx hardhat run scripts/demo-flow.ts --network citreaTestnet
 npx ts-node scripts/inscribe-binst.ts institution "Acme Financial" <admin_pubkey>
 
 # Generate vault descriptor (Rust — replaces taproot-vault.ts)
-cd taproot-reader && cargo test -p binst-decoder vault
+cd binst-protocol && cargo test -p binst-decoder vault
 
 # Bitcoin awareness (reads Light Client)
 npx tsx scripts/bitcoin-awareness.ts
