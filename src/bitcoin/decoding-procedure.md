@@ -53,22 +53,22 @@ cargo run --bin citrea-scanner -- --from 127600 --to 127761 --format json \
 ### Citrea RPC mode (no Bitcoin node required)
 
 ```bash
-# Query batch proofs via Citrea RPC with auto-discovery of BINST contracts
+# Query batch proofs via Citrea RPC
 cargo run --bin citrea-scanner -- \
   --citrea-rpc https://rpc.testnet.citrea.xyz \
   --discover \
-  --deployer 0xd0abca83bd52949fcf741d6da0289c5ec7235aaf \
+  --factory 0x6a1d2adbac8682773ed6700d2118c709c8ce5000 \
   --block 127848
 
-# Manual contract addresses (skip discovery)
+# Manual instance addresses (skip discovery)
 cargo run --bin citrea-scanner -- \
   --citrea-rpc https://rpc.testnet.citrea.xyz \
-  --deployer 0x... --template 0x... --instance 0x... \
+  --factory 0x... --instance 0x... \
   --from 127840 --to 127850
 ```
 
-The `--discover` flag crawls the deployer contract on-chain:
-`deployer.getInstitutions()` → `institution.getProcesses()` → `template.getAllInstances()`.
+The `--discover` flag crawls the factory contract on-chain:
+`factory.getInstanceCount()` → `factory.allInstances(i)` → instance addresses.
 
 ## 8. Human-Readable Value Decoding
 
@@ -76,13 +76,12 @@ Once BINST storage slot changes are identified, raw hex values are automatically
 decoded into human-readable form. Example output from block 127848:
 
 ```
-ProcessTemplate.name = "KYC Verification"
-ProcessInstance.creator = 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
-ProcessInstance.stepStates[0] = Completed by 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
-ProcessInstance.currentStepIndex = 4
-ProcessInstance.completed = true
-ProcessTemplate.steps.length = 4
-BINSTDeployer.institutions[0] = 0x3a6a07c5d2c420331f68dd407aafff92f3275a86
+BINSTProcess.templateInscriptionId = "abc123…i0"
+BINSTProcess.creator = 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
+BINSTProcess.stepStates[0] = Completed by 0x8cf6fe5cd0905b6bfb81643b0dcda64af32fd762
+BINSTProcess.currentStepIndex = 4
+BINSTProcess.completed = true
+BINSTProcess.totalSteps = 4
 ```
 
 ### Supported Solidity types

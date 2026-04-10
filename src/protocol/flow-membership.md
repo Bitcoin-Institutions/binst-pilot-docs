@@ -26,12 +26,12 @@ Rune: ACME•MEMBER
    → member now holds membership token in their Bitcoin wallet
    → visible in any Rune-aware wallet or indexer
 
-2. Admin calls addMember(memberAddress) on the L2 contract
-   → L2 contract updates member list
-   → (optional: contract verifies Rune balance via bridge)
+2. Membership is verifiable on Bitcoin immediately
+   → any Rune indexer can confirm the balance
+   → no L2 interaction required for membership checks
 
-3. L2 state diff reaches Bitcoin via batch proof
-   → member addition is now ZK-proven on Bitcoin
+3. L2 state reaches Bitcoin via batch proof
+   → if any L2 process references member activity, it is ZK-proven on Bitcoin
 ```
 
 ## L1 + L2 Mirroring
@@ -41,7 +41,7 @@ Membership exists in **two places** simultaneously:
 | Layer | How membership is represented | How to check |
 |---|---|---|
 | **Bitcoin L1** | Rune balance (`ACME•MEMBER ≥ 1`) | Any Rune indexer |
-| **L2 (Citrea)** | `isMember[address]` mapping in `Institution.sol` | EVM view call |
+| **L2 (Citrea)** | On-chain state in ZK batch proof | Batch proof decode |
 
 Both representations should be kept in sync. The Bitcoin Rune is the **authoritative** source — if there's a discrepancy, the Rune balance wins.
 

@@ -16,7 +16,7 @@ Bitcoin secret key (ROOT OF AUTHORITY)
        └── any L2     (portable)
 ```
 
-The user who holds the Bitcoin private key has **full control** of every element in the protocol. If they decide to use a different L2, they deploy a new contract, point it at the same inscription ID, and pick up where they left off.
+The user who holds the Bitcoin private key has **full control** of every element in the protocol. If they decide to use a different L2, they create new process instances on the new chain, point them at the same inscription IDs, and pick up where they left off.
 
 ## What the Key Controls
 
@@ -24,7 +24,7 @@ The user who holds the Bitcoin private key has **full control** of every element
 |---|---|---|
 | **Inscription UTXO** | Identity, metadata, provenance | No — this IS the identity |
 | **Rune distribution** | Membership tokens | No — lives on Bitcoin L1 |
-| **L2 contract** | Processing logic (workflows, payments) | **Yes** — redeploy to any L2 |
+| **L2 process instances** | Processing logic (workflows, payments) | **Yes** — create on any L2 |
 | **Mirror contracts** | Read-only identity/membership on other L2s *(Phase 3 — not yet built)* | **Yes** — add/remove mirrors |
 
 ## L2 Portability
@@ -44,26 +44,31 @@ See [Cross-Chain Synchronization](./cross-chain.md) for the full model.
 
 | Scenario | Severity | Recovery |
 |---|---|---|
-| L2 goes down | **Graceful** | Redeploy contracts on another L2; identity survives on Bitcoin |
-| Inscription UTXO lost | **Serious** | Re-inscribe as child of original + deploy new L2 contract |
+| L2 goes down | **Graceful** | Create new instances on another L2; identity survives on Bitcoin |
+| Inscription UTXO lost | **Serious** | Re-inscribe as child of original + create new L2 instances |
 | Bitcoin key lost | **Catastrophic** | Committee 2-of-3 multi-sig recovery (Taproot vault Leaf 1) |
 
 The degradation is intentionally hierarchical: losing the L2 is easy to recover from, losing the inscription UTXO is hard but possible, losing the Bitcoin key requires the committee backstop.
 
-## Cryptographic Binding: `btcPubkey`
+## Cryptographic Binding: `admin` Pubkey
 
-The `Institution` contract stores a `bytes32 btcPubkey` field — the
-32-byte x-only public key (BIP-340) of the institution admin's Bitcoin key.
+The institution inscription body contains an `admin` field — the
+32-byte x-only public key (BIP-340, hex, 64 chars) of the institution
+admin's Bitcoin key. This key is the **root identity anchor** for the
+entire protocol.
 
-This closes the trust gap between Bitcoin identity and L2 contracts.
-Without it, the link between an inscription and a contract is
-informational (a stored string). With it, the binding is **verifiable**:
+This closes the trust gap between Bitcoin identity and L2 execution.
+Without it, the link between an inscription and an L2 process instance
+is informational (a stored string). With it, the binding is **verifiable**:
 
-1. Read the institution's `btcPubkey` from the L2 contract
+1. Read the institution inscription's `admin` field from Bitcoin L1
 2. Read the inscription UTXO's owner from Bitcoin
 3. Verify they match — no oracle, no trust
+4. L2 process instances carry a `templateInscriptionId` that chains
+   back to the institution inscription, completing the link
 
 Citrea's Schnorr precompile (`0x0000000000000000000000000000000000000200`)
-enables BIP-340 signature verification on-chain, which is the foundation
-for this binding. The Rust `BitcoinIdentity` struct requires
-`bitcoin_pubkey` — the L2 contract stores the same key.
+enables BIP-340 signature verification on-chain, which can be used to
+verify that an L2 caller is the legitimate admin. The Rust
+`BitcoinIdentity` struct requires `bitcoin_pubkey` — the inscription
+body stores the same key as `admin`.

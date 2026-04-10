@@ -114,10 +114,10 @@ to:
    scripts change from `OP_CHECKSIG` (Schnorr) to whatever PQ opcode
    Bitcoin adopts.
 
-3. **Rotate `btcPubkey` bindings** on the L2 contracts.  The
-   `setBtcPubkey()` function is currently set-once.  A PQ migration
-   would require either a new setter or a contract upgrade to rebind
-   to a PQ public key.
+3. **Rotate `admin` pubkey bindings** in inscription bodies.  The
+   `admin` field is currently a 32-byte x-only Schnorr key set at
+   inscription time.  A PQ migration would require re-inscribing
+   with a PQ public key in the `admin` field.
 
 4. **Update the metaprotocol schema** to support PQ key formats in
    the `admin` field of inscription bodies (currently a 32-byte
@@ -130,7 +130,7 @@ to:
 | **Document the migration path** (this page) | Done | Now |
 | **Avoid key reuse** — each vault uses fresh keys | Already in place | Now |
 | **Don't rely on key-path spend** — NUMS is already default | Already in place | Now |
-| **Design `setBtcPubkey` v2** — allow admin-initiated key rotation with timelocked delay | Low | Phase 4 |
+| **Design `admin` key rotation** — allow re-inscription with timelocked delay for key migration | Low | Phase 4 |
 | **Monitor BIPs** for PQ address proposals | Ongoing | — |
 | **Prototype PQ inscription transfer** when a PQ address format is available on signet | Medium | When available |
 

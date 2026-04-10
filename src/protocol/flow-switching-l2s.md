@@ -7,19 +7,26 @@ One of BINST's core properties: the L2 is replaceable. Here's how migration work
 ```text
 1. Admin decides to move from Citrea to another L2 (e.g., BOB)
 
-2. Admin deploys new Institution contract on the new L2
-   → binds it to the SAME inscription ID and rune ID
+2. BINSTProcess instance carries full state:
+   → templateInscriptionId (L1 anchor — same on any chain)
+   → steps[] (embedded at creation, no external dependency)
+   → currentStepIndex + stepStates[] (current execution state)
+   → creator address
 
-3. The Bitcoin-layer identity is unchanged:
+3. Migration via LayerZero (Phase 65 — future):
+   → _lzSend() on source chain carries the full state
+   → Destination chain deploys new BINSTProcess with that state
+   → sourceChainId + sourceAddress fields link back to origin
+
+4. The Bitcoin-layer identity is unchanged:
    → same inscription, same UTXO, same admin key
    → same membership Rune, same member balances
    → provenance chain is intact
 
-4. The old L2 contract becomes historical — its batch proofs
+5. The old L2 instance becomes historical — its batch proofs
    remain on Bitcoin as a permanent record of past operations
 
-5. New operations flow through the new L2 contract
-   → the institution continues seamlessly
+6. The new L2 instance continues execution from where it left off
 ```
 
 ## What Survives
@@ -31,10 +38,17 @@ One of BINST's core properties: the L2 is replaceable. Here's how migration work
 | Membership Runes | ✅ Unchanged — live on Bitcoin, not on any L2 |
 | Provenance chain | ✅ Unchanged — parent/child inscriptions intact |
 | Old L2 state | ✅ Preserved — batch proofs on Bitcoin are permanent |
-| New L2 contract | 🆕 New address, bound to same inscription |
+| New L2 instance | 🆕 Deployed with full state, same `templateInscriptionId` |
 
 ## Why This Works
 
-The Bitcoin key is the root of authority, not the L2 contract address. The inscription is the institution's identity, not the Solidity code. When you move L2s, you're changing the **processing engine**, not the institution itself.
+The Bitcoin key is the root of authority, not the L2 contract address.
+The inscription is the institution's identity, not the Solidity code.
+When you move L2s, you're changing the **processing engine**, not the
+institution itself.
 
-This is analogous to moving a company's operations from one country to another — the company's identity (registration, brand, ownership) doesn't change. Only the operational jurisdiction does.
+Because `BINSTProcess` instances are **self-contained** (embedded step
+definitions, no dependency on external L2 contracts), migration is a
+single message. The destination chain doesn't need a pre-deployed
+factory, institution, or template — it just deploys a new `BINSTProcess`
+pre-loaded with the migrated state.

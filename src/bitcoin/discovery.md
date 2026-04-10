@@ -12,11 +12,11 @@ How to find and verify BINST entities — from casual browsing to full trustless
 | Who are all members? | Rune indexer query | ❌ No |
 | What processes exist? | Child inscriptions | ❌ No |
 | What step is instance Y on? | L2 RPC (Citrea) | ❌ No |
-| Is institution X anchored? | L2 view call (`inscriptionId != ""`) | ❌ No |
+| Is institution X anchored? | Inscription exists + L2 instances reference it | ❌ No |
 | Was step execution valid? | ZK batch proof decode | ✅ Yes |
 | Full trustless verification? | binst-protocol CLI | ✅ Yes |
 | Which L2 is processing? | Inscription metadata | ❌ No |
-| Is this person a member? (cross-chain) | InstitutionMirror on any L2 *(Phase 3 — not yet built)* | ❌ No |
+| Is this person a member? (cross-chain) | Rune balance via indexer | ❌ No |
 | Did step X complete? (cross-chain) | Bitcoin DA batch proof | ✅ Yes |
 
 ## Two Tiers
@@ -36,22 +36,22 @@ Tier 3 (verification):  Bitcoin full node + binst-protocol CLI
 
 ### Auto-discovery with `--discover`
 
-The `citrea-scanner` CLI can automatically crawl the deployer contract to find
-all BINST contracts registered on-chain:
+The `citrea-scanner` CLI can automatically crawl the factory contract to find
+all BINST process instances registered on-chain:
 
 ```bash
 cargo run --bin citrea-scanner -- \
   --citrea-rpc https://rpc.testnet.citrea.xyz \
   --discover \
-  --deployer 0xd0abca83bd52949fcf741d6da0289c5ec7235aaf \
+  --factory 0x6a1d2adbac8682773ed6700d2118c709c8ce5000 \
   --block 127848
 ```
 
 Discovery chain:
-1. `deployer.getInstitutions()` → all institution addresses
-2. `institution.getProcesses()` → all template addresses
-3. `deployer.getDeployedProcesses()` → standalone templates
-4. `template.getAllInstances()` → all instance addresses
+1. `factory.getInstanceCount()` → total number of instances
+2. `factory.allInstances(i)` → instance address by index
+3. `factory.getTemplateInstances(inscriptionId)` → instances for a specific L1 template
+4. `factory.getUserInstances(address)` → instances created by a specific user
 
 All discovered addresses are merged into the BINST registry, which pre-computes
 storage slot hashes for matching against state diffs in ZK batch proofs.

@@ -2,27 +2,44 @@
 
 ## Solidity Tests (Hardhat 3, `node:test`)
 
-14 tests in `test/BINSTPilot.ts` covering the full contract lifecycle:
+24 tests in `test/BINSTPilot.ts` covering the active contract architecture:
+
+### BINSTProcessFactory + BINSTProcess (10 tests)
 
 | # | Test | What it verifies |
 |---|------|-----------------|
-| 1 | Deploy BINSTDeployer | Factory deploys, owner set correctly |
-| 2 | Create Institution | `createInstitution()` emits event, stores name/admin |
-| 3 | Set Inscription ID | Admin can bind Bitcoin inscription |
-| 4 | Set Rune ID | Admin can bind Rune for membership |
-| 5 | Add Member | Admin adds member, `isMember` returns true |
-| 6 | Remove Member | Admin removes member, `isMember` returns false |
-| 7 | Create Process Template | Template created with correct step names |
-| 8 | Create Process Instance | Instance linked to template and institution |
-| 9 | Execute Step | First step executed, state updated |
-| 10 | Execute All Steps | Sequential execution through all steps |
-| 11 | Complete Instance | Final step marks instance as completed |
-| 12 | Access Control | Non-admin calls revert with correct error |
-| 13 | Set btcPubkey | Admin can set Bitcoin x-only pubkey |
-| 14 | btcPubkey validation | Rejects zero pubkey and non-admin calls |
+| 1 | Deploy factory | Factory deploys successfully |
+| 2 | Create instance | `createInstance()` deploys `BINSTProcess` with correct templateInscriptionId |
+| 3 | Instance step names | Step names match creation args |
+| 4 | Execute step | `executeStep(Completed, "")` advances currentStepIndex |
+| 5 | Complete all steps | Sequential execution through all steps marks `completed = true` |
+| 6 | Get user instances | `getUserInstances()` returns correct addresses |
+| 7 | Get template instances | `getTemplateInstances()` returns instances by inscription ID |
+| 8 | Step state tracking | `getStepState()` returns correct status per step |
+| 9 | Access control | Non-creator calls revert |
+| 10 | Instance count | `getInstanceCount()` tracks total instances |
+
+### Extended lifecycle tests (14 tests)
+
+| # | Test | What it verifies |
+|---|------|-----------------|
+| 11 | Deploy factory (variant) | Alternate deploy scenario |
+| 12 | Create institution entity | Institution creation emits event, stores name/admin |
+| 13 | Set Inscription ID | Admin can bind Bitcoin inscription |
+| 14 | Set Rune ID | Admin can bind Rune for membership |
+| 15 | Add Member | Admin adds member, membership confirmed |
+| 16 | Remove Member | Admin removes member, membership revoked |
+| 17 | Create Process Template | Template created with correct step names |
+| 18 | Create Process Instance | Instance linked to template |
+| 19 | Execute Step | First step executed, state updated |
+| 20 | Execute All Steps | Sequential execution through all steps |
+| 21 | Complete Instance | Final step marks instance as completed |
+| 22 | Access Control | Non-admin calls revert with correct error |
+| 23 | Set admin pubkey | Admin can set Bitcoin x-only pubkey |
+| 24 | Admin pubkey validation | Rejects zero pubkey and non-admin calls |
 
 ```bash
-npx hardhat test          # runs all 14
+npx hardhat test          # runs all 24
 ```
 
 ## Rust Tests (`cargo test`)
@@ -132,7 +149,7 @@ cd binst-protocol && cargo test    # runs all 80 protocol tests
 
 ## WASM Webapp Tests (`cargo test`)
 
-83 tests in `webapp/binst-pilot-webapp/`, running on the native target
+97 tests in `webapp/binst-pilot-webapp/`, running on the native target
 (no browser required):
 
 | Module | Count | What is tested |
@@ -140,10 +157,10 @@ cd binst-protocol && cargo test    # runs all 80 protocol tests
 | `stack` | 21 | `Stack` ordering, parent refs, reorder, validate, summary |
 | `l2_queue` | 13 | `L2Queue` push/remove/clear/validate/summary, `L2ActionKind` labels |
 | `storage` | 12 | localStorage save/load/confirm/clear, JSON round-trips |
+| `stack_plan` | 12 | `build_plan` — all institution states: Root, InBatch, InMempool, Confirmed, External; `ParentSource` routing; sibling deferral |
 | `txbuilder` | 9 | Commit+reveal PSBT construction, fee calculation, parent UTXO input |
-| `auth` | 7 | Authentication state transitions |
-| `stack_plan` | 7 | `build_plan` — all institution states: Root, InBatch, InMempool, Confirmed, External; `ParentSource` routing |
 | `decode` | 9 | JSON/witness/vault decoder helpers |
+| `auth` | 7 | Authentication state transitions |
 | `dom` | 6 | HTML escaping, toast variants, DOM helpers |
 | `search` | 4 | Institution card rendering, HTML escaping, source badges |
 | `nav` | 4 | View routing, URL hash parsing |
@@ -153,20 +170,20 @@ UI code (DOM manipulation, wallet calls, async flows) runs only in WASM and is
 covered by browser smoke testing, not unit tests.
 
 ```bash
-cd webapp/binst-pilot-webapp && cargo test    # runs all 83 webapp tests
+cd webapp/binst-pilot-webapp && cargo test    # runs all 97 webapp tests
 ```
 
 ## Running Everything
 
 ```bash
 # Solidity
-cd binst-pilot && npx hardhat test            # 14 tests
+cd binst-pilot && npx hardhat test            # 24 tests
 
 # Protocol crates
 cd binst-protocol && cargo test               # 80 tests
 
 # WASM webapp
-cd webapp/binst-pilot-webapp && cargo test    # 83 tests
+cd webapp/binst-pilot-webapp && cargo test    # 97 tests
 
-# Total: 177 tests
+# Total: 201 tests
 ```

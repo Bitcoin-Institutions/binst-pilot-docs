@@ -27,6 +27,17 @@ Institution "Acme Financial" (root inscription)
 
 Anyone running `ord` can verify the full provenance chain — "KYC Onboarding was created by Acme Financial" — without touching any L2.
 
+> **Security note — tag 3 is self-declared, not cryptographic.**
+> Writing tag 3 bytes into the Ordinals envelope requires no private key;
+> any party can claim any parent inscription ID.  The only cryptographically
+> secure provenance proof is the parent sat being **spent as an input of the
+> child's reveal transaction** — that requires the holder's private key.
+> The BINST webapp distinguishes these with a three-level badge system:
+> ⛓ *provenance verified* (sat-spend proven), ✓ *unverified* (tag 3 only),
+> and ⬡ *declared* (JSON field only).
+> See [Provenance & Parent-Child Security](./provenance.md) for the full
+> security model, verification algorithm, and real-world testnet4 examples.
+
 Each entity in the tree gets its **own sat, own UTXO, own vault**. The
 parent-child relationship links them, but each inscription is
 independently held and independently protected. New information about

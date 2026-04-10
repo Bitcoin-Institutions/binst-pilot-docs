@@ -1,7 +1,7 @@
 # Cross-Chain Synchronization
 
 > **⚠ Architectural vision — not built in the pilot.**
-> This page describes Phase 3 design. The current pilot runs on a single L2 (Citrea). `BINSTRelay.sol` and `InstitutionMirror.sol` do not exist yet. The Bitcoin DA verification path is live; the LayerZero identity sync is not.
+> This page describes Phase 3 design. The current pilot runs on a single L2 (Citrea). Cross-chain relay and mirror contracts do not exist yet. The Bitcoin DA verification path is live; the LayerZero identity sync is not.
 
 BINST institutions can be **omnipresent across multiple L2s** simultaneously, not just portable between them.
 
@@ -19,7 +19,7 @@ Two sync channels, each optimized for different needs:
 
 | Channel | What it syncs | Speed | Trust model |
 |---|---|---|---|
-| **LayerZero V2** | Identity: name, admin, members, inscriptionId, runeId | Fast (real-time) | DVN-configurable |
+| **LayerZero V2** | Identity: name, admin, inscriptionId | Fast (real-time) | DVN-configurable |
 | **Bitcoin DA** | Execution: process step states, completion proofs | Slow (batch interval) | Trustless (ZK-proven) |
 
 ## LayerZero V2 on Citrea
@@ -34,13 +34,13 @@ This maps directly to BINST's L2 portability promise.
 
 | Tier | Data | Sync method | Writable? |
 |---|---|---|---|
-| **Identity** | inscriptionId, runeId, admin, name | LayerZero (fast) | Home chain only |
-| **Membership** | members[], isMember | LayerZero (fast) | Home chain only |
+| **Identity** | inscriptionId, admin, name | LayerZero (fast) | Home chain only |
+| **Membership** | Rune balance | Bitcoin L1 (authoritative) | Bitcoin only |
 | **Execution** | stepStates[], process progress | Bitcoin DA (trustless) | Home chain only |
 
 ## Single-Writer Rule
 
-**Critical invariant:** A `ProcessInstance` lives on exactly one home chain. It is created there, executed there, completed there. Mirror chains can *read* process state but cannot *mutate* it.
+**Critical invariant:** A `BINSTProcess` instance lives on exactly one home chain. It is created there, executed there, completed there. Mirror chains can *read* process state but cannot *mutate* it.
 
 This prevents the core distributed systems problem: two L2s executing the same step simultaneously and producing conflicting state.
 
@@ -53,8 +53,8 @@ A rollback mechanism would mean:
 
 This adds enormous complexity and violates the simplicity principle. Instead, **architectural prevention** eliminates the problem entirely:
 
-- Mirror contracts (`InstitutionMirror.sol`) expose only view functions: `isMember()`, `getAdmin()`, `getInscriptionId()`
-- No `executeStep()`, no `createProcess()`, no mutating functions
+- Mirror contracts expose only view functions: read-only access to process state, step status, and completion
+- No `executeStep()`, no `createInstance()`, no mutating functions
 - The type system enforces the invariant at compile time
 
 ### Cross-chain process references
@@ -79,7 +79,7 @@ LayerZero introduces a dependency outside Bitcoin — messages go through DVNs (
 
 Phase 3 will introduce:
 
-- `BINSTRelay.sol` — an OApp contract that listens for institution events on the home L2 and broadcasts identity state to registered mirror chains
-- `InstitutionMirror.sol` — a read-only contract on non-home chains that receives and exposes institution identity/membership data
+- **BINSTRelay** — an OApp that listens for institution events on the home L2 and broadcasts identity state to registered mirror chains
+- **ProcessMirror** — a read-only contract on non-home chains that receives and exposes process state and institution identity data
 
 This turns BINST from "portable across L2s" (manual redeploy) into "**omnipresent across L2s**" (automatic sync).

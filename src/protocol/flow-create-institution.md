@@ -19,21 +19,21 @@ The full lifecycle from key generation to a fully anchored Bitcoin-sovereign ins
    → INSTITUTION•MEMBER, premine: 1
    → admin holds the initial unit
 
-4. Admin deploys Institution.sol on an L2 (currently Citrea)
-   → constructor gets: name, admin address
-   → admin calls setInscriptionId() and setRuneId() to bind the contract
-   → the L2 contract is now a DELEGATE of the Bitcoin key holder
+4. Institution is now discoverable on Bitcoin
+   → any Ordinals explorer shows the inscription
+   → the admin pubkey in the body identifies the controller
+   → the inscription ID is the stable, cross-chain identifier
 
 5. L2 state reaches Bitcoin via batch proof
-   → institution is now represented THREE ways on Bitcoin:
+   → institution is represented on Bitcoin via:
       a) Ordinal inscription (identity — AUTHORITATIVE)
       b) Rune (membership token)
-      c) State diff in batch proof (computational state)
+      c) State diff in batch proof (L2 computational state)
 ```
 
-> **Note:** Step 4 can be repeated on any L2. The inscription ID and Rune ID stay the same. Only the L2 contract address changes.
+> **Note:** The institution inscription ID can be referenced from any L2. If a `BINSTProcess` instance on Citrea references this inscription via `templateInscriptionId`, the provenance chain is verifiable.
 
-> **Note:** Steps 2–3 (Bitcoin) and step 4 (L2) are independent — they can happen in any order. If step 4 happens first without steps 2–3, the institution is **UNANCHORED** (see [Institution Anchoring Lifecycle](./anchoring-lifecycle.md)).
+> **Note:** Steps 2–3 (Bitcoin) are independent of any L2 activity. If a user creates L2 process instances before inscribing, the institution is **UNANCHORED** (see [Institution Anchoring Lifecycle](./anchoring-lifecycle.md)).
 
 ## Transaction Summary
 
@@ -42,9 +42,6 @@ The full lifecycle from key generation to a fully anchored Bitcoin-sovereign ins
 | Generate key | Offline | None | Free |
 | Inscribe identity | Bitcoin | Ordinal inscription (~500B) | ~$2–5 |
 | Etch Rune | Bitcoin | Runestone in OP_RETURN | ~$1–3 |
-| Deploy contract | Citrea | EVM contract creation | ~cBTC gas |
-| Bind inscription | Citrea | EVM function call | ~cBTC gas |
-| Bind Rune | Citrea | EVM function call | ~cBTC gas |
 | Batch proof | Bitcoin | Automatic (sequencer) | User doesn't pay |
 
 ## The Inscription Envelope

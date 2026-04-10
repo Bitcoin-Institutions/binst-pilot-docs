@@ -22,6 +22,7 @@
 # Bitcoin Integration
 
 - [Ordinals — Entity Identity](./bitcoin/ordinals.md)
+    - [Provenance & Parent-Child Security](./bitcoin/provenance.md)
     - [Mempool Pre-Consolidation](./bitcoin/mempool-consolidation.md)
 - [Runes — Membership Tokens](./bitcoin/runes.md)
 - [Taproot Vault — UTXO Safety](./bitcoin/taproot-vault.md)

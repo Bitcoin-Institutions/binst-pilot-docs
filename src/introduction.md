@@ -1,11 +1,13 @@
 # BINST Pilot
 
-> *A proof-of-concept for Bitcoin-sovereign institutional processes.*
+> *A proof-of-concept for Bitcoin-sovereign institutional design and operations.*
 
 Can complex institutional entities — institutions, process templates,
 running workflows, step-by-step execution — be **permanently represented
 on Bitcoin L1** and have their associated events **verified at the
 Bitcoin layer**?
+
+Ultimately, can complex entities of arbitrary structure and their linked events carrying arbitrary content be created, owned, and operated on Bitcoin? 
 
 That is the core question. Not "decentralization" in the abstract, but
 something concrete: can a Bitcoin inscription be the canonical record of
@@ -16,6 +18,7 @@ The pilot is a proof-of-concept for that claim. An EVM-compatible L2
 (Citrea) handles the operational logic as a delegate of the Bitcoin key
 holder. The L2 is replaceable; the inscription is not.
 
+
 ## How it works
 
 | Concern | Approach |
@@ -24,17 +27,17 @@ holder. The L2 is replaceable; the inscription is not.
 | Membership | Runes tokens on Bitcoin L1 — holding ≥1 token means membership |
 | Operational logic | Runs on Citrea (EVM L2) as a delegate of the Bitcoin key |
 | Authority | The Bitcoin key controls the inscription UTXO; the L2 contract obeys it |
-| L2 replaceability | Redeploying contracts on a new L2 and binding them to the same inscription preserves identity |
+| L2 replaceability | Creating new process instances on a new L2, bound to the same inscription, preserves identity |
 | UTXO safety | Taproot script tree (NUMS + CSV + multisig) protects the inscription sat |
 | Event verification | L2 batch proofs are written to Bitcoin DA — execution state is ZK-provable from Bitcoin |
 
 If the L2 disappears, the inscription remains. If the L2 is replaced,
-the same Bitcoin identity binds to the new contracts.
+the same Bitcoin identity binds to the new process instances.
 
 ## What the pilot implements
 
-- **4 smart contracts** deployed and verified on Citrea testnet —
-  factory, institution, process template, process instance
+- **2 smart contracts** deployed and verified on Citrea testnet —
+  `BINSTProcessFactory` (thin factory) and `BINSTProcess` (self-contained instance)
 - **4 Rust crates** (BINST Protocol) — decoding BINST data directly
   from Bitcoin transactions, `no_std`-compatible, WASM-ready
 - **6 TypeScript scripts** — end-to-end protocol flows, Bitcoin

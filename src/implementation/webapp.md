@@ -30,8 +30,8 @@ wallet slots and routes each action to the correct one.
 
 ### Serverless inscription pipeline (L1)
 
-A Bitcoin inscription is not a simple transfer. Every entity
-(Institution, ProcessTemplate, ProcessInstance) that lands on Bitcoin L1
+A Bitcoin inscription is not a simple transfer. Every BINST entity
+(institution, process template) that lands on Bitcoin L1
 requires:
 
 1. **A commit transaction** — funds a Taproot output whose script
@@ -146,12 +146,21 @@ UTXO lookup during stack planning.
 
 ---
 
-## L2 Queue — EVM action review buffer
+## L2 Execute — direct EVM calls
 
-The **L2 queue** is a review buffer for pending Citrea EVM calls.
-Because EVM calls cannot be batched, the user sees all pending actions
-before any wallet pop-up appears. The "Send Next" button sends one at a
-time, each requiring its own EVM wallet signature.
+L2 process execution goes through the **Execute view**, not through the
+stack. Each EVM transaction fires **immediately** on button click — no
+batching, no queue. The L1 stack is Bitcoin-only.
+
+| Action | Contract call | Trigger |
+|---|---|---|
+| Create Instance | `factory.createInstance(inscriptionId, names[], types[])` | "Create Instance on Citrea" button |
+| Execute Step | `instance.executeStep(status, evidence)` | "Execute Step →" button |
+
+All EVM/ABI logic lives in `citrea.rs`. The `execute.rs` module is a
+thin UI wiring layer that delegates to `citrea.rs` for every on-chain
+call. Instance state (steps, completion, finality) is read directly from
+the contract via `eth_call` — no wallet needed for reads.
 
 ---
 
@@ -162,22 +171,24 @@ time, each requiring its own EVM wallet signature.
 | `lib.rs` | WASM entry point — boots all views |
 | `auth.rs` | Authentication state |
 | `bridge.rs` | Confirmation polling loop + pipeline panel DOM; `resume_pending_polls` on connect |
+| `citrea.rs` | All L2 EVM/ABI logic: `create_instance`, `execute_step`, ABI encoding, finality queries, event log recovery |
 | `create.rs` | Create Institution view — form, validates, pushes to stack |
 | `decode.rs` | JSON / witness / vault decoder UI |
 | `design.rs` | Design Process view — form, fetches parent UTXO, pushes to stack |
 | `dom.rs` | DOM helpers, toast notifications, clipboard |
 | `effects.rs` | Visual effects (logo tilt, spark effect) |
-| `execute.rs` | Execute view — pushes `ExecuteStep` to L2 queue |
+| `execute.rs` | Execute view — thin UI wiring, delegates to `citrea.rs` for all on-chain calls; finality status display |
 | `fetch.rs` | Shared HTTP fetch helpers (Mempool.space API) |
 | `inscribe.rs` | Full serverless pipeline: fetch UTXOs → build PSBTs → sign → broadcast; `fetch_tx_output` |
 | `institution.rs` | Institution card rendering and navigation |
-| `l2_queue.rs` | Pure Rust L2 action queue — `L2ActionKind`, `L2Action`, `L2Queue`, 13 tests |
+| `l2_queue.rs` | Pure Rust L2 action queue data model (not wired to UI — kept for tests only) |
 | `nav.rs` | View routing and bottom nav, 4 tests |
+| `process.rs` | Process view + instance creation via factory flow |
 | `search.rs` | Institution search against Ordiscan API + localStorage, 4 tests |
 | `stack.rs` | Pure Rust L1 inscription stack — `StackEntry`, ordering, validation, 21 tests |
-| `stack_plan.rs` | Pure-Rust execution planner — institution grouping, `InstitutionState`, `ParentSource`, 7 tests |
-| `stack_ui.rs` | Stack/queue panel UI — institution-grouped render, plan-driven `on_sign_inscribe` |
-| `storage.rs` | localStorage inscription registry: save, confirm, load, 12 tests |
+| `stack_plan.rs` | Pure-Rust execution planner — institution grouping, `InstitutionState`, `ParentSource`, 12 tests |
+| `stack_ui.rs` | Stack panel UI — institution-grouped render, plan-driven `on_sign_inscribe` |
+| `storage.rs` | localStorage registry: inscriptions, templates, L2 instance tx hashes, 12 tests |
 | `txbuilder.rs` | Commit+reveal PSBT construction; parent UTXO as second reveal input, 9 tests |
 | `wallet.rs` | L1 BTC wallet — EIP-6963 + manual detection, connect/disconnect, pubkey extraction |
 | `wallet_picker.rs` | Wallet picker modal; L2 EVM wallets (WalletConnect, MetaMask, Brave) |
@@ -207,17 +218,17 @@ the system Apple clang does not support that target.
 cargo test  # runs on native target — no browser needed
 ```
 
-83 tests across 10 modules:
+97 tests across 11 modules:
 
 | Module | Tests |
 |--------|-------|
 | `stack` | 21 |
 | `l2_queue` | 13 |
 | `storage` | 12 |
+| `stack_plan` | 12 |
 | `txbuilder` | 9 |
-| `auth` | 7 |
-| `stack_plan` | 7 |
 | `decode` | 9 |
+| `auth` | 7 |
 | `dom` | 6 |
 | `search` | 4 |
 | `nav` | 4 |
